@@ -1,0 +1,34 @@
+;; What this vertical's robot physically does, declared for
+;; kotoba.robotics.process (kotoba-lang/robotics). `kbb -M:physics` runs it.
+;;
+;; README "Robotics premise": a boiler-plant scheduling/logistics coordination
+;; robot logs pressures and maintenance, proposes crew schedules, surfaces
+;; safety concerns and coordinates spare-parts supply; it never operates the
+;; boiler or steam equipment. Its physical work is patrol measurement: the
+;; surface temperature of insulated steam lines it walks past, and the
+;; feedwater line whose pressure it logs.
+;;
+;; Every number without a cited source is marked `estimate` in its :basis.
+;; Replacing an estimate with a sourced value is this bot's growth work.
+{:physics/schema "itonami.physical-ai.spec.v1"
+ :repo "cloud-itonami/cloud-itonami-isco-8182"
+ :cases
+ [{:id :steam-line-lagging-surface
+   :kind :thermal
+   :procedure "mineral-wool lagging on a 180 C steam line (pipe wall held at 180 C) after 4 hours; the robot reads the lagging surface on patrol"
+   :params {:conductivity-w-mk 0.045 :density-kg-m3 100.0 :specific-heat-j-kgk 840.0
+            :t0-c 25.0 :t-hot-c 180.0 :front-fixed? true :t-back-ambient-c 25.0 :h-back-w-m2k 10.0
+            :threshold-c 50.0 :duration-s 14400.0 :nodes 21}
+   :sweep {:param :thickness-m :values [0.015 0.020 0.025 0.050 0.075 0.100]}
+   :quantity :final-back-c
+   :limit {:max 50.0 :basis "estimate: ~50 C surface temperature often used as the personnel-protection target for hot-pipe insulation"}
+   :boundary {:lo 0.01 :hi 0.1}}
+  {:id :feedwater-line
+   :kind :pipe-flow
+   :procedure "feedwater at ~105 C pumped from the deaerator through a 50 mm, 40 m line up 10 m to the boiler drum; the robot logs the line pressure"
+   :params {:diameter-m 0.050 :length-m 40.0 :roughness-m 4.5e-5
+            :density-kg-m3 955.0 :viscosity-pa-s 2.7e-4 :pump-efficiency 0.60 :elevation-m 10.0}
+   :sweep {:param :q-m3s :values [0.001 0.002 0.003 0.004 0.005]}
+   :quantity :pressure-drop-pa
+   :limit {:max 250000.0 :basis "estimate: margin the feed pump has between its shut-off head and drum pressure for line losses"}
+   :boundary {:lo 0.0005 :hi 0.01}}]}

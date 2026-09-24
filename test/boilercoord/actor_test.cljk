@@ -1,5 +1,5 @@
 (ns boilercoord.actor-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [kotoba.test :refer [deftest is testing]]
             [boilercoord.actor :as actor]
             [boilercoord.store :as store]))
 

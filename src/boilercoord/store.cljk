@@ -1,7 +1,7 @@
 (ns boilercoord.store
   "SSoT for the ISCO-08 8182 Steam Engine and Boiler Operators
   boiler-plant scheduling/logistics coordination actor (itonami actor
-  pattern, ADR-2607121000 / CLAUDE.md Actors section; README's
+  pattern, ADR-2607121000 / AGENTS.md Actors section; README's
   'Robotics premise' — a boiler-plant scheduling/logistics
   coordination robot proposes crew/shift scheduling, pressure-log/
   maintenance-record/progress record logging, safety-concern flags
